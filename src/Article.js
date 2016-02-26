@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import CommentList from './CommentList'
 import toggleOpen from './HOC/toggleOpen'
+import CSSTransition from 'react-addons-css-transition-group'
+require('./style.css')
 
 class Article extends Component {
     static propTypes = {
@@ -19,7 +21,9 @@ class Article extends Component {
             <div ref="container">
                 <a href = "#" onClick = {this.select.bind(this)} >select</a>
                 {this.getTitle()}
-                {this.getBody()}
+                <CSSTransition transitionName="example" transitionAppear={true} transitionEnterTimeout={500} transitionLeaveTimeout={300}>
+                    {this.getBody()}
+                </CSSTransition>
             </div>
         )
     }
@@ -38,7 +42,7 @@ class Article extends Component {
         if (!this.props.isOpen) return null
         const {article} = this.props
         return (
-            <div>
+            <div key="article">
                 <p>{article.body}</p>
                 <CommentList comments = {article.comments || []} />
             </div>
