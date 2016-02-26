@@ -1,18 +1,23 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import CommentList from './CommentList'
+import toggleOpen from './HOC/toggleOpen'
 
 class Article extends Component {
-    constructor() {
-        super()
-        this.state = {
-            showBody: false
-        };
+    static propTypes = {
+        article: PropTypes.object,
+
+        isOpen: PropTypes.bool,
+        toggleOpen: PropTypes.func
+    };
+
+    componentDidMount() {
+        console.log('---', this.refs.container);
     }
 
     render() {
         return (
-            <div>
-                <a href = "#" onClick = {this.select.bind(this)}>select</a>
+            <div ref="container">
+                <a href = "#" onClick = {this.select.bind(this)} >select</a>
                 {this.getTitle()}
                 {this.getBody()}
             </div>
@@ -23,14 +28,14 @@ class Article extends Component {
         const { title } = this.props.article
         const selectedStyle = this.props.selected ? {color: 'red'} : null;
         return  (
-            <h3 style = {selectedStyle} onClick={this.handleClick.bind(this)}>
+            <h3 style = {selectedStyle} onClick={this.props.toggleOpen}>
                 {title}
             </h3>
         )
     }
 
     getBody() {
-        if (!this.state.showBody) return null
+        if (!this.props.isOpen) return null
         const {article} = this.props
         return (
             <div>
@@ -44,12 +49,6 @@ class Article extends Component {
         ev.preventDefault()
         this.props.select()
     }
-
-    handleClick(ev) {
-        this.setState({
-            showBody: !this.state.showBody
-        })
-    }
 }
 
-export default Article
+export default toggleOpen(Article)
