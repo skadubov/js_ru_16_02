@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import hint from './HOC/hint'
 
 class Comment extends Component {
     static propTypes = {
@@ -7,9 +8,9 @@ class Comment extends Component {
 
     render() {
         return (
-			<span>{this.props.comment.text}</span>
+			<span title={this.props.hint}>{this.props.comment.text}</span>
 		)
     }
 }
 
-export default Comment
+export default hint(Comment)
