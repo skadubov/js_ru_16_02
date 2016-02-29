@@ -1,34 +1,28 @@
 import React, { Component, PropTypes } from 'react'
 import Comment from './Comment'
+import toggleOpen from './HOC/toggleOpen'
 
 class CommentList extends Component {
     static propTypes = {
-        comments: PropTypes.array
+        comments: PropTypes.array,
+
+        isOpen: PropTypes.bool,
+        toggleOpen: PropTypes.func
     };
 
-    state = {
-        isOpen: false
-    }
-
     render() {
-        const { isOpen } = this.state
-        const actionText = isOpen ? 'hide comments' : 'show comments'
+        const actionText = this.props.isOpen ? 'hide comments' : 'show comments'
 
-        const comments = this.props.comments.map((comment) => <li key={comment.id}><Comment comment = {comment}/></li>)
+        const comments = this.props.comments.map((comment) => <p key={comment.id}><Comment comment = {comment}/></p>)
         return (
             <div>
-                <a href = "#" onClick = {this.toggleOpen}>{actionText}</a>
-                {isOpen ? comments : null}
+                <a href = "#" onClick = {this.props.toggleOpen}>{actionText}</a>
+	            <div className="comments">
+    	            {this.props.isOpen ? comments : null}
+	            </div>
             </div>
         )
     }
-
-    toggleOpen = (ev) => {
-        ev.preventDefault()
-        this.setState({
-            isOpen: !this.state.isOpen
-        })
-    }
 }
 
-export default CommentList
+export default toggleOpen(CommentList)

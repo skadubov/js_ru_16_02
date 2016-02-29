@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import CommentList from './CommentList'
 import toggleOpen from './HOC/toggleOpen'
-import CSSTransition from 'react-addons-css-transition-group'
 require('./style.css')
 
 class Article extends Component {
@@ -19,11 +18,9 @@ class Article extends Component {
     render() {
         return (
             <div ref="container">
-                <a href = "#" onClick = {this.select.bind(this)} >select</a>
                 {this.getTitle()}
-                <CSSTransition transitionName="example" transitionAppear={true} transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-                    {this.getBody()}
-                </CSSTransition>
+                <a href = "#" onClick = {this.select.bind(this)} >select</a>
+                {this.getBody()}
             </div>
         )
     }
@@ -32,7 +29,7 @@ class Article extends Component {
         const { title } = this.props.article
         const selectedStyle = this.props.selected ? {color: 'red'} : null;
         return  (
-            <h3 style = {selectedStyle} onClick={this.props.toggleOpen}>
+            <h3 className="art_head" style = {selectedStyle} onClick={this.props.toggleOpen}>
                 {title}
             </h3>
         )

@@ -28,9 +28,15 @@ class ArticleList extends Component {
 
     select(id) {
         return function() {
-            this.setState({
-                selected: this.state.selected.concat(id)
-            })
+            if(this.state.selected.includes(id)) {
+				this.setState({
+				  selected: this.state.selected.filter( (value) => value != id)
+				})
+			} else {
+				this.setState({
+				  selected: this.state.selected.concat(id)
+				})
+			}
         }
     }
 }
