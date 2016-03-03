@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import CommentList from './CommentList'
-import toggleOpen from './HOC/toggleOpen'
+import withHint from './HOC/withHint'
+import { deleteArticle } from './actions/articles'
 require('./style.css')
 
 class Article extends Component {
@@ -11,25 +12,22 @@ class Article extends Component {
         toggleOpen: PropTypes.func
     };
 
-    componentDidMount() {
-        console.log('---', this.refs.container);
-    }
-
     render() {
         return (
-            <div ref="container">
-                {this.getTitle()}
+            <div>
                 <a href = "#" onClick = {this.select.bind(this)} >select</a>
+                {this.props.getHint()}
+                {this.getTitle()}
                 {this.getBody()}
             </div>
         )
     }
 
     getTitle() {
-        const { title } = this.props.article
-        const selectedStyle = this.props.selected ? {color: 'red'} : null;
+        const {showHint, hideHint, onClick, selected, article: { title }} = this.props
+        const selectedStyle = selected ? {color: 'red'} : null;
         return  (
-            <h3 className="art_head" style = {selectedStyle} onClick={this.props.toggleOpen}>
+            <h3 className="art_head" style = {selectedStyle} onClick={onClick} onMouseEnter = {showHint(title)} onMouseLeave={hideHint}>
                 {title}
             </h3>
         )
@@ -40,11 +38,17 @@ class Article extends Component {
         const {article} = this.props
         return (
             <div key="article">
+                <a href="#" onClick = {this.handleDeleteArticle}>delete this article</a>
                 <p>{article.body}</p>
-                <CommentList comments = {article.comments || []} />
+                <CommentList id={article.id} comments={article.getRelation('comments')} />
             </div>
         )
     }
+
+    handleDeleteArticle = (ev) => {
+        ev.preventDefault()
+        deleteArticle(this.props.article.id)
+    };
 
     select(ev) {
         ev.preventDefault()
@@ -52,4 +56,4 @@ class Article extends Component {
     }
 }
 
-export default toggleOpen(Article)
+export default withHint(Article)

@@ -2,9 +2,6 @@
 .art_head {
   cursor: pointer;
 }
-.comments {
-  padding-left: 20px;
-}
-.comments p {
-  color: blue;
+.comments ul {
+  color: green;
 }

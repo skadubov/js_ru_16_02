@@ -1,29 +1,58 @@
 import React, { Component, PropTypes } from 'react'
 import Comment from './Comment'
-import toggleOpen from './HOC/toggleOpen'
-import hint from './HOC/hint'
+import { addComment, deleteComment } from './actions/comments'
 
 class CommentList extends Component {
     static propTypes = {
-        comments: PropTypes.array,
-
-        isOpen: PropTypes.bool,
-        toggleOpen: PropTypes.func
+        comments: PropTypes.array
     };
 
-    render() {
-        const actionText = this.props.isOpen ? 'hide comments' : 'show comments'
+    state = {
+        isOpen: false,
+        comment: ''
+    }
 
-        const comments = this.props.comments.map((comment) => <p key={comment.id}><Comment comment = {comment}/></p>)
+    render() {
+        const { isOpen } = this.state
+        const actionText = isOpen ? 'hide comments' : 'show comments'
+
+        const comments = this.props.comments.map((comment) =>
+			<li key={comment.id}><Comment comment = {comment} clickDelete={this.handleDelete.bind(this, comment.id)} /></li>)
         return (
-            <div>
-                <a href="#" title={this.props.hint} onClick={this.props.toggleOpen}>{actionText}</a>
-	            <div className="comments">
-    	            {this.props.isOpen ? comments : null}
-	            </div>
+            <div className="comments">
+                <a href = "#" onClick = {this.toggleOpen}>{actionText}</a>
+                <ul>
+					{isOpen ? comments : null}
+				</ul>
+				<form onSubmit={this.handleSubmit}>
+					<input type="text" value={this.state.comment} onChange={this.handleChange} placeholder='Input new comment' />
+					<input type="submit" value="Add comment" />
+				</form>
             </div>
         )
     }
+
+	handleChange = (ev) => {
+		this.setState({	comment: ev.target.value })
+		};
+
+	handleSubmit = (ev) => {
+        ev.preventDefault()
+		if(!this.state.comment) return;
+		addComment({id: this.props.id, comment: {id: +new Date(), text:this.state.comment} })
+		this.setState({	comment: ''	})
+		};
+
+	handleDelete = (id) => {
+		deleteComment(this.props.id, id)
+		};
+
+    toggleOpen = (ev) => {
+        ev.preventDefault()
+        this.setState({
+            isOpen: !this.state.isOpen
+        })
+    }
 }
 
-export default hint(toggleOpen(CommentList))
+export default CommentList
