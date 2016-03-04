@@ -1,10 +1,10 @@
 import AppDispatcher from '../dispatcher'
 import { ADD_COMMENT, DELETE_COMMENT } from './constants'
 
-export function addComment(comment) {
+export function addComment(article_id, comment_text) {
     AppDispatcher.dispatch({
         type: ADD_COMMENT,
-        data: { ...comment }
+        data: { article_id, comment: {text: comment_text, id: +new Date() } }
     })
 }
 

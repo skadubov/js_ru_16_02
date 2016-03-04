@@ -10,17 +10,20 @@ class ArticleStore extends SimpleStore {
 
             switch (type) {
                 case DELETE_ARTICLE:
+					console.log(DELETE_ARTICLE, 'article_id=', data.id);
                     this.delete(data.id)
 		            this.emitChange()
                     break;
 
 	             case ADD_COMMENT:
+					console.log(ADD_COMMENT, 'article_id=', data.article_id);
                     AppDispatcher.waitFor([args[0].comments.dispatchToken]);
-                    this.addCommentId(data.id, data.comment.id);
+                    this.addCommentId(data.article_id, data.comment.id);
 		            this.emitChange()
                     break;
 
 	             case DELETE_COMMENT:
+					console.log(DELETE_COMMENT, 'article_id=', data.article_id);
                     AppDispatcher.waitFor([args[0].comments.dispatchToken]);
                     this.deleteCommentId(data.article_id, data.comment_id);
 		            this.emitChange()

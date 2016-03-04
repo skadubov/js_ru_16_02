@@ -9,11 +9,13 @@ class CommentStore extends SimpleStore {
             const { type, data } = action
             switch (type) {
                 case ADD_COMMENT:
-                    this.add(data.comment);
+					console.log(ADD_COMMENT, data.comment);
+                    this.add({id: data.comment.id, text: data.comment.text});
 		            this.emitChange()
                     break;
 
                 case DELETE_COMMENT:
+					console.log(DELETE_COMMENT, data.comment_id);
                     this.delete(data.comment_id)
 		            this.emitChange()
                     break;

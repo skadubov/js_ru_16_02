@@ -39,7 +39,7 @@ class CommentList extends Component {
 	handleSubmit = (ev) => {
         ev.preventDefault()
 		if(!this.state.comment) return;
-		addComment({id: this.props.id, comment: {id: +new Date(), text:this.state.comment} })
+		addComment(this.props.id, this.state.comment)
 		this.setState({	comment: ''	})
 		};
 
