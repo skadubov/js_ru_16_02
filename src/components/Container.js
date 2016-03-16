@@ -1,15 +1,13 @@
 import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 import { articlesStore } from '../stores'
-import { loadAllArticles, filteredArticles } from './../actions/articles'
 import ArticleList from './ArticleList'
-import Select from 'react-select';
-import 'react-select/dist/react-select.css'
+import { loadAllArticles } from './../actions/articles'
 
 class Container extends Component {
     state = {
-        titles: articlesStore.getTitles(),
-   	    articles: articlesStore.getFiltered(),
-   	    filteredId: []
+        articles: articlesStore.getOrLoadAll(),
+        loading: articlesStore.loading
     }
 
     componentDidMount() {
@@ -21,44 +19,36 @@ class Container extends Component {
     }
 
     render() {
-        const { articles, titles, loading } = this.state
-        const options = titles.map(article => {
-	       return {
-              value: article.id,
-              label: article.title
-     	      }
-           });
+        const { loading } = this.state
         if (loading) return <h3>Loading...</h3>
         return (
-            <div id="example">
-                <Select
-                   multi
-                   className="filter"
-                   placeholder="Choice articles"
-                   name="form-field-name"
-                   value={this.state.filteredId}
-                   options={options}
-                   onChange={this.handleFilter.bind(this)}
-                 />
-                <ArticleList articles = {articles} />
+            <div>
+                {this.getMenu()}
+                {this.props.children}
             </div>
         )
     }
 
-	handleFilter(val) {
-		this.setState({
-			filteredId : val.length ? val.split(',') : []
-		})
-		filteredArticles(val)
+    getMenu() {
+        const links = this.state.articles.map((article) =>
+            <li key={article.id}>
+                <Link to={`/articles/${article.id}`}
+                    activeClassName = "active"
+                    activeStyle = {{color: 'red'}}
+                >
+                    {article.title}
+                </Link>
+            </li>)
+        return <ul>{links}</ul>
     }
 
     change = () => {
         this.setState({
             loading: articlesStore.loading,
-	        titles: articlesStore.getTitles(),
-	        articles: articlesStore.getFiltered()
+            articles: articlesStore.getAll()
         })
     };
 }
+
 
 export default Container

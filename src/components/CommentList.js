@@ -27,7 +27,7 @@ class CommentList extends Component {
         const actionText = isOpen ? 'hide comments' : 'show comments'
 
         return (
-            <div className="comments">
+            <div>
                 <a href = "#" onClick = {toggleOpen}>{actionText}</a>
                 {this.getBody()}
             </div>
@@ -42,10 +42,8 @@ class CommentList extends Component {
         return (
             <div>
                 <ul>{isOpen ? commentList : null}</ul>
-				<form onSubmit={this.submitComment}>
-					<input type="text" value={this.state.comment} onChange={this.commentChange} placeholder='Input new comment' />
-					<input type="submit" value="Add comment" />
-				</form>
+                <input value = {this.state.comment} onChange = {this.commentChange}/>
+                <a href = "#" onClick = {this.submitComment}>add comment</a>
             </div>
         )
     }

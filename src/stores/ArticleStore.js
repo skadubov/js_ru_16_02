@@ -1,7 +1,7 @@
 import SimpleStore from './SimpleStore'
-import { LOAD_COMMENTS_FOR_ARTICLE, DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARTICLES, LOAD_ARTICLE_BY_ID, LOAD_ARTICLES_TITLES, GET_FILTERED_ARTICLES, _START, _FAIL, _SUCCESS } from '../actions/constants'
+import { LOAD_COMMENTS_FOR_ARTICLE, DELETE_ARTICLE, ADD_COMMENT, LOAD_ALL_ARICLES, LOAD_ARTICLE_BY_ID,_START, _FAIL, _SUCCESS } from '../actions/constants'
 import AppDispatcher from '../dispatcher'
-import { loadAllArticles, loadArticlesTitles } from '../actions/articles'
+import { loadAllArticles } from '../actions/articles'
 
 class ArticleStore extends SimpleStore {
     constructor(...args) {
@@ -20,42 +20,21 @@ class ArticleStore extends SimpleStore {
                     article.comments = (article.comments || []).concat(data.id)
                     break
 
-                case LOAD_ALL_ARTICLES + _START:
+                case LOAD_ALL_ARICLES + _START:
                     this.loading = true
                     this.loaded = false
                     break;
 
-                case LOAD_ALL_ARTICLES + _FAIL:
+                case LOAD_ALL_ARICLES + _FAIL:
                     this.loaded = false
                     this.loading = false
                     this.error = error
                     break
 
-                case LOAD_ALL_ARTICLES + _SUCCESS:
+                case LOAD_ALL_ARICLES + _SUCCESS:
                     this.loaded = true
                     this.loading = false
                     response.forEach(this.add)
-                    break;
-
-                case LOAD_ARTICLES_TITLES + _START:
-                    this.loading = true
-                    this.loaded = false
-                    break;
-
-                case LOAD_ARTICLES_TITLES + _FAIL:
-                    this.loaded = false
-                    this.loading = false
-                    this.error = error
-                    break
-
-                case LOAD_ARTICLES_TITLES + _SUCCESS:
-                    this.loaded = true
-                    this.loading = false
-                    response.forEach(this.add)
-                    break;
-
-				case GET_FILTERED_ARTICLES:
-                    this.filtered = data.list
                     break;
 
                 case LOAD_ARTICLE_BY_ID + _START:
@@ -80,19 +59,6 @@ class ArticleStore extends SimpleStore {
     getOrLoadAll() {
         if (!this.loading && !this.loaded) loadAllArticles()
         return this.getAll()
-    }
-
-    getTitles() {
-        if (!this.loading && !this.loaded) loadArticlesTitles()
-        return this.getAll()
-    }
-
-	 getFiltered() {
-	    if(this.filtered) {
-	        return this.__items.filter(item => this.filtered.includes(item.id))
-		} else {
-			return this.__items
-		}
     }
 }
 

@@ -1,3 +1,4 @@
+//import {articles, comments} from '../fixtures'
 import ArticleStore from './ArticleStore'
 import CommentStore from './CommentStore'
 
