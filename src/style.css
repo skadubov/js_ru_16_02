@@ -29,10 +29,23 @@
 .art_head {
   cursor: pointer;
 }
-.comments ul {
-  color: green;
+.comment p {
+  color: darkgreen;
 }
 
 .filter {
   width: 400px;
+}
+.time {
+  color: brown;
+}
+.username {
+  font-weight:bold;
+}
+.page {
+  padding: 4px;
+}
+.active-page {
+  color: red;
+  background-color:#ddd;
 }
