@@ -13,7 +13,8 @@ class CommentList extends Component {
 
     static contextTypes = {
         router: PropTypes.object,
-        user: PropTypes.string
+        user: PropTypes.string,
+        msg: PropTypes.object
     }
 
     state = {
@@ -29,7 +30,7 @@ class CommentList extends Component {
 
     render() {
         const { isOpen, toggleOpen } = this.props
-        const actionText = isOpen ? 'hide comments' : 'show comments'
+        const actionText = isOpen ? this.context.msg.hideComments : this.context.msg.showComments
 
         return (
             <div>
@@ -40,17 +41,16 @@ class CommentList extends Component {
     }
 
     getBody() {
-//        console.log('--- context: ', this.context.user);
         const { article, isOpen } = this.props
         if (!isOpen) return null
-        if (!this.checkComments()) return <h3>loading comments...</h3>
+        if (!this.checkComments()) return <h3>{this.context.msg.loading}</h3>
         const commentList = article.getRelation('comments').map(comment => <li key={comment.id}><Comment comment = {comment}/></li>)
         return (
             <div>
                 user: {this.context.user}
                 <ul>{isOpen ? commentList : null}</ul>
                 <input value = {this.state.comment} onChange = {this.commentChange}/>
-                <a href = "#" onClick = {this.submitComment}>add comment</a>
+                <a href = "#" onClick = {this.submitComment}>{this.context.msg.addComment}</a>
             </div>
         )
     }

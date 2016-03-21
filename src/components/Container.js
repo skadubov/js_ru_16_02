@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
+import { i18n } from '../i18n'
 import { articlesStore, usersStore } from '../stores'
 import ArticleList from './ArticleList'
 import { loadAllArticles, createNewArticle } from './../actions/articles'
@@ -9,7 +10,9 @@ class Container extends Component {
     state = {
         articles: articlesStore.getOrLoadAll(),
         loading: articlesStore.loading,
-        currentUser: usersStore.currentUser
+        currentUser: usersStore.currentUser,
+        lang: 'ru',
+		msg: i18n['ru']
     }
 
     componentDidMount() {
@@ -23,21 +26,23 @@ class Container extends Component {
     }
 
     static childContextTypes = {
-        user: PropTypes.string
+        user: PropTypes.string,
+        msg: PropTypes.object
     }
 
     getChildContext() {
         return {
-            user: this.state.currentUser
+            user: this.state.currentUser,
+			msg: this.state.msg
         }
     }
 
     render() {
-        const { loading } = this.state
-        if (loading) return <h3>Loading...</h3>
+        if (this.state.loading) return <h3>{this.state.msg.loading}</h3>
         return (
             <div>
-                <a href = "#" onClick = {this.login}>Login</a>
+                <a href="javascript:void(0)" onClick={this.login}>{this.state.msg.login}</a>
+	            {this.getLangLine()}
                 {this.getMenu()}
                 {this.props.children}
             </div>
@@ -49,21 +54,42 @@ class Container extends Component {
         login()
     }
 
+    getLangLine() {
+	    const langs = Object.keys(i18n).map(key =>
+            <li key={key}>
+	            <a href="javascript:void(0)" onClick={this.handleChangeLang.bind(this, key)}>{key}</a>
+            </li>
+        )
+        return (
+			<div>
+				{this.state.msg.langChoice}:
+				<ul className="lang">{langs}</ul>
+			</div>
+        )
+    }
+
     getMenu() {
         const links = this.state.articles.map((article) =>
             <li key={article.id}>
-                <Link to={`/articles/${article.id}`}
-                    activeClassName = "active"
-                    activeStyle = {{color: 'red'}}
-                >
+                <Link to={`/articles/${article.id}`} activeClassName = "active" activeStyle = {{color: 'red'}} >
                     {article.title}
                 </Link>
             </li>)
-        return <div>
-            <ul>{links}</ul>
-            <a href="#" onClick={this.handleNewClick}>create new article</a>
-        </div>
+        return (
+			<div>
+    	        <ul>{links}</ul>
+	            <a href="javascript:void(0)" onClick={this.handleNewClick}>{this.state.msg.createNewArticle}</a>
+	        </div>
+        )
     }
+
+    handleChangeLang = (key) => {
+        this.setState({
+	        lang: key,
+			msg: i18n[key]
+        })
+    }
+
     handleNewClick = (ev) => {
         ev.preventDefault()
         createNewArticle()
@@ -82,6 +108,5 @@ class Container extends Component {
         })
     };
 }
-
 
 export default Container

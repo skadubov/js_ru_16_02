@@ -11,6 +11,10 @@ class Article extends Component {
         toggleOpen: PropTypes.func
     };
 
+   static contextTypes = {
+        msg: PropTypes.object
+    };
+
 /*
     shouldComponentUpdate(nextProps, nextState) {
         console.log('---', arguments);
@@ -28,6 +32,7 @@ class Article extends Component {
     }
 
     getTitle() {
+console.log('----', this.props);
         const { onClick, selected, article: { title } } = this.props
         const selectedStyle = selected ? {color: 'red'} : null;
         return  (
@@ -39,10 +44,10 @@ class Article extends Component {
 
     getBody() {
         const {article} = this.props
-        if (article.loading) return <div key="article!"><h2>Loading...</h2></div>
+        if (article.loading) return <div key="article!"><h2>{this.context.msg.loading}</h2></div>
         return (
             <div key="article">
-                <a href="#" onClick = {this.handleDeleteArticle}>delete this article</a>
+                <a href="#" onClick = {this.handleDeleteArticle}>{this.context.msg.deleteArticle}</a>
                 <p>{article.text}</p>
                 <CommentList article = {article}/>
             </div>

@@ -49,3 +49,9 @@
   color: red;
   background-color:#ddd;
 }
+
+/* lang */
+.lang, .lang li {
+  display:inline;
+  padding:4px;
+}
