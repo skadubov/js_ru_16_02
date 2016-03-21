@@ -23,6 +23,7 @@ export default (
             <Route path = ":page" component = {CommentsPaginationPage} />
         </Route>
         <Redirect from = "/:id" to="/articles/:id" />
+        <Redirect from ='/' to='/articles'/>
         <Route path = "*" component = {NotFound} />
     </Router>
 )

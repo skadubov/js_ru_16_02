@@ -4,7 +4,7 @@ import { i18n } from '../i18n'
 import { articlesStore, usersStore } from '../stores'
 import ArticleList from './ArticleList'
 import { loadAllArticles, createNewArticle } from './../actions/articles'
-import { login } from '../actions/user'
+import { login, logout } from '../actions/user'
 
 class Container extends Component {
     state = {
@@ -41,7 +41,7 @@ class Container extends Component {
         if (this.state.loading) return <h3>{this.state.msg.loading}</h3>
         return (
             <div>
-                <a href="javascript:void(0)" onClick={this.login}>{this.state.msg.login}</a>
+				{this.getAuth()}
 	            {this.getLangLine()}
                 {this.getMenu()}
                 {this.props.children}
@@ -49,9 +49,23 @@ class Container extends Component {
         )
     }
 
-    login = (ev) => {
+    toggleAuth = (ev) => {
         ev.preventDefault()
-        login()
+		const {currentUser} = this.state
+		currentUser ? logout() : login()
+    }
+
+    getAuth() {
+		const {currentUser} = this.state
+        const username = currentUser ? <span className="username">{currentUser} </span> : null
+        const msgAuth = currentUser ? this.state.msg.logout : this.state.msg.login
+
+        return (
+			<div>
+				{username}
+	            <a href="javascript:void(0)" onClick={this.toggleAuth}>{msgAuth}</a>
+			</div>
+        )
     }
 
     getLangLine() {

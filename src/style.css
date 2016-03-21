@@ -41,6 +41,7 @@
 }
 .username {
   font-weight:bold;
+  padding-right:4px;
 }
 .page {
   padding: 4px;

@@ -8,6 +8,7 @@ export const LOAD_COMMENTS_FOR_ARTICLE = 'LOAD_COMMENTS_FOR_ARTICLE'
 export const LOAD_COMMENTS_FOR_PAGE = 'LOAD_COMMENTS_FOR_PAGE'
 
 export const LOGIN = 'LOGIN'
+export const LOGOUT = 'LOGOUT'
 
 export const _START = '_START'
 export const _SUCCESS = '_SUCCESS'

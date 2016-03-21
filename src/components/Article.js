@@ -15,13 +15,6 @@ class Article extends Component {
         msg: PropTypes.object
     };
 
-/*
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log('---', arguments);
-        return this.props.article != nextProps.article
-    }
-*/
-
     render() {
         return (
             <div>
@@ -32,7 +25,6 @@ class Article extends Component {
     }
 
     getTitle() {
-console.log('----', this.props);
         const { onClick, selected, article: { title } } = this.props
         const selectedStyle = selected ? {color: 'red'} : null;
         return  (
