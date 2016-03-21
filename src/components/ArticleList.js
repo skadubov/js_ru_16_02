@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Article from './Article'
+import CommentList from './CommentList'
 import Select from 'react-select'
 require('react-select/dist/react-select.css')
 

@@ -1,14 +1,15 @@
-import PageStore from './PageStore'
-import { ADD_COMMENT, LOAD_COMMENTS_FOR_ARTICLE, LOAD_COMMENTS_PAGE, _SUCCESS, _FAIL, _START } from '../actions/constants'
+import SimpleStore from './SimpleStore'
+import { ADD_COMMENT, LOAD_COMMENTS_FOR_ARTICLE, LOAD_COMMENTS_FOR_PAGE, _SUCCESS, _FAIL, _START } from '../actions/constants'
 import AppDispatcher from '../dispatcher'
-import { loadCommentsPage } from '../actions/comment'
-const COMMENT_PAGE_SIZE = 10
+import { loadCommentForPage } from '../actions/comment'
 
-class CommentStore extends PageStore {
+class CommentStore extends SimpleStore {
     constructor(...args) {
         super(...args)
+        this.loading = []
+        this.loaded = []
         this.dispatchToken = AppDispatcher.register((action) => {
-            const { type, data, response, error } = action
+            const { type, data, response } = action
 
             switch (type) {
                 case ADD_COMMENT:
@@ -22,11 +23,16 @@ class CommentStore extends PageStore {
                     response.forEach(this.add)
                     break
 
-                case LOAD_COMMENTS_PAGE + _SUCCESS:
-                    this.setCurrentPage(data.page)
-                    this.setTotalPages(Math.ceil(response.total/data.limit))
+                case LOAD_COMMENTS_FOR_PAGE + _START:
+                    this.loading.push(data.page)
+                    break;
+
+                case LOAD_COMMENTS_FOR_PAGE + _SUCCESS:
+                    this.loading = this.loading.filter(page => page!= data.page)
+                    this.__total = response.total
+                    this.loaded[data.page] = response.records.map(record => record.id)
                     response.records.forEach(this.add)
-                    break
+                    break;
 
                 default: return
             }
@@ -35,12 +41,14 @@ class CommentStore extends PageStore {
         })
     }
 
-    getPage(page) {
-        if(this.getCurrentPage() != page) {
-			this.resetItems()
-	        setTimeout(() => loadCommentsPage({page, limit: COMMENT_PAGE_SIZE}), 0)
-		}
-		return this.getAll()
+    getOrLoadForPage(page) {
+        if (this.loaded[page]) return this.loaded[page].map(this.getById)
+        if (!this.loading.includes(page)) loadCommentForPage({page})
+        return []
+    }
+
+    getTotal() {
+        return this.__total
     }
 }
 

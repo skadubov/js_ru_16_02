@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import CommentList from './CommentList'
-import CSSTransition from 'react-addons-css-transition-group'
 import { deleteArticle } from './../actions/articles'
 require('./../style.css')
 
@@ -12,16 +11,18 @@ class Article extends Component {
         toggleOpen: PropTypes.func
     };
 
+/*
+    shouldComponentUpdate(nextProps, nextState) {
+        console.log('---', arguments);
+        return this.props.article != nextProps.article
+    }
+*/
+
     render() {
         return (
             <div>
                 {this.getTitle()}
-                <CSSTransition transitionName="example" transitionAppear={true}
-                               transitionAppearTimeout={500}
-                               transitionEnterTimeout={500}
-                               transitionLeaveTimeout={300}>
-                    {this.getBody()}
-                </CSSTransition>
+                {this.getBody()}
             </div>
         )
     }
@@ -30,7 +31,7 @@ class Article extends Component {
         const { onClick, selected, article: { title } } = this.props
         const selectedStyle = selected ? {color: 'red'} : null;
         return  (
-            <h3 className="art_head" style = {selectedStyle} onClick={onClick}>
+            <h3 style = {selectedStyle} onClick={onClick}>
                 {title}
             </h3>
         )
