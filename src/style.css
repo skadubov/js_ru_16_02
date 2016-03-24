@@ -32,27 +32,3 @@
 .comment p {
   color: darkgreen;
 }
-
-.filter {
-  width: 400px;
-}
-.time {
-  color: brown;
-}
-.username {
-  font-weight:bold;
-  padding-right:4px;
-}
-.page {
-  padding: 4px;
-}
-.active-page {
-  color: red;
-  background-color:#ddd;
-}
-
-/* lang */
-.lang, .lang li {
-  display:inline;
-  padding:4px;
-}

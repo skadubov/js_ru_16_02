@@ -6,13 +6,11 @@ require('./../style.css')
 class Article extends Component {
     static propTypes = {
         article: PropTypes.object,
+        addComment: PropTypes.func,
+        deleteArticle: PropTypes.func,
 
         isOpen: PropTypes.bool,
         toggleOpen: PropTypes.func
-    };
-
-   static contextTypes = {
-        msg: PropTypes.object
     };
 
     render() {
@@ -25,30 +23,29 @@ class Article extends Component {
     }
 
     getTitle() {
-        const { onClick, selected, article: { title } } = this.props
-        const selectedStyle = selected ? {color: 'red'} : null;
+        const { onClick, article: { title } } = this.props
         return  (
-            <h3 style = {selectedStyle} onClick={onClick}>
+            <h3 className="art_head" onClick={onClick}>
                 {title}
             </h3>
         )
     }
 
     getBody() {
-        const {article} = this.props
-        if (article.loading) return <div key="article!"><h2>{this.context.msg.loading}</h2></div>
+        const {article, addComment, isOpen} = this.props
+        if (!isOpen) return null
         return (
             <div key="article">
-                <a href="#" onClick = {this.handleDeleteArticle}>{this.context.msg.deleteArticle}</a>
+                <a href="javascript:void(0)" onClick = {this.handleDeleteArticle}>delete this article</a>
                 <p>{article.text}</p>
-                <CommentList article = {article}/>
+                <CommentList {...{ addComment, article }}/>
             </div>
         )
     }
 
     handleDeleteArticle = (ev) => {
         ev.preventDefault()
-        deleteArticle(this.props.article.id)
+        this.props.deleteArticle(this.props.article.id)
     };
 }
 

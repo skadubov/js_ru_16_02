@@ -14,8 +14,7 @@ export default function (CustomComponent) {
             />
         }
 
-        toggleOpen = (ev) => {
-	        ev.preventDefault()
+        toggleOpen = () => {
             this.setState({
                 isOpen: !this.state.isOpen
             })
